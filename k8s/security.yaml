@@ -1,0 +1,53 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: microservices-demo
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: backend2-mtls
+  namespace: microservices-demo
+spec:
+  selector:
+    matchLabels:
+      app: backend2
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: frontend-to-backend
+  namespace: microservices-demo
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  rules:
+  - to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/api/backend1", "/"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: backend-to-backend2
+  namespace: microservices-demo
+spec:
+  selector:
+    matchLabels:
+      app: backend2
+  rules:
+  - to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/api/backend2", "/"]

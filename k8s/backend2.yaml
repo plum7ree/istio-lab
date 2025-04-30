@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend2
+  namespace: microservices-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend2
+  template:
+    metadata:
+      labels:
+        app: backend2
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      serviceAccountName: backend2
+      containers:
+      - name: backend2
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: backend2-nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend2
+  namespace: microservices-demo
+spec:
+  selector:
+    app: backend2
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP 
