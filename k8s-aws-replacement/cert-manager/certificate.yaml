@@ -1,0 +1,15 @@
+# Certificate - TLS 인증서 자동 관리
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: microservices-tls
+  namespace: microservices-demo
+spec:
+  secretName: microservices-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - microservices.example.com
+  - *.microservices.example.com
+

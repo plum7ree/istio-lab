@@ -1,0 +1,34 @@
+# ServiceMonitor - Prometheus 메트릭 수집 (AWS CloudWatch 대체)
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: microservices-monitor
+  namespace: microservices-demo
+  labels:
+    app: microservices
+spec:
+  selector:
+    matchLabels:
+      monitoring: enabled
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - microservices-demo
+---
+# PodMonitor - Pod 레벨 메트릭 수집
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: microservices-pod-monitor
+  namespace: microservices-demo
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  podMetricsEndpoints:
+  - port: http
+    interval: 30s
+

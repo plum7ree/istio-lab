@@ -1,0 +1,33 @@
+# Knative Service - 서버리스 (AWS Lambda 대체)
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: serverless-backend
+  namespace: microservices-demo
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+        autoscaling.knative.dev/target: "100"
+    spec:
+      containerConcurrency: 100
+      containers:
+      - image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENV
+          value: "knative-serverless"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"
+  traffic:
+  - percent: 100
+    latestRevision: true
+

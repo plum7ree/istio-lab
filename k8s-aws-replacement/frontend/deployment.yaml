@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: microservices-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      serviceAccountName: frontend
+      containers:
+      - name: frontend
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: BACKEND_SERVICE
+          value: "http://backend.microservices-demo.svc.cluster.local"
+        - name: BACKEND2_SERVICE
+          value: "http://backend2.microservices-demo.svc.cluster.local"
+
+

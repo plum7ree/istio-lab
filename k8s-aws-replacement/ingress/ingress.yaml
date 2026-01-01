@@ -1,0 +1,42 @@
+# Ingress - 로드밸런서 (AWS ALB/NLB 대체)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-ingress
+  namespace: microservices-demo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - microservices.example.com
+    secretName: microservices-tls
+  rules:
+  - host: microservices.example.com
+    http:
+      paths:
+      - path: /api/backend1
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /api/backend2
+        pathType: Prefix
+        backend:
+          service:
+            name: backend2
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+

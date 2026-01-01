@@ -1,0 +1,60 @@
+# CronJob - 스케줄링된 작업 (AWS EventBridge/CloudWatch Events 대체)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-job
+  namespace: microservices-demo
+spec:
+  schedule: "0 2 * * *"  # 매일 새벽 2시 실행
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cleanup-job
+          containers:
+          - name: cleanup
+            image: busybox:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Cleanup job started at $(date)"
+              # 여기에 정리 작업 스크립트 추가
+              echo "Cleanup job completed at $(date)"
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "128Mi"
+              limits:
+                cpu: "200m"
+                memory: "256Mi"
+          restartPolicy: OnFailure
+---
+# Job - 일회성 작업 예제
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-export-job
+  namespace: microservices-demo
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  template:
+    spec:
+      serviceAccountName: data-export-job
+      containers:
+      - name: exporter
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Exporting data..."
+          sleep 30
+          echo "Export completed"
+      restartPolicy: OnFailure
+

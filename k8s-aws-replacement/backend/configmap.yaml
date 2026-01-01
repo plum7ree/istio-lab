@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-nginx-config
+  namespace: microservices-demo
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name _;
+
+        location /api/backend1 {
+            default_type application/json;
+            return 200 '{"message": "Hello from Backend 1"}';
+        }
+
+        location / {
+            default_type application/json;
+            return 200 '{"message": "Backend 1 Root"}';
+        }
+    }
+

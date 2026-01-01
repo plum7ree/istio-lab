@@ -1,0 +1,66 @@
+# StatefulSet - 상태있는 애플리케이션 (AWS RDS 대체 예시)
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: microservices-demo
+spec:
+  serviceName: database
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      serviceAccountName: database
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secret
+              key: root-password
+        - name: MYSQL_DATABASE
+          value: "microservices"
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: fast-ssd
+      resources:
+        requests:
+          storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: microservices-demo
+spec:
+  clusterIP: None
+  selector:
+    app: database
+  ports:
+  - port: 3306
+    targetPort: 3306
+    name: mysql
+
