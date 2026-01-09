@@ -14,6 +14,7 @@
 
 - [개요](#개요)
 - [Karpenter 완전 이해하기](#karpenter-완전-이해하기) ⭐ **추천**
+- [Karpenter 권한 구조](#karpenter-권한-구조) 🔐 **권한 궁금하면 여기!**
 - [프로젝트 구조](#프로젝트-구조)
 - [빠른 시작](#빠른-시작)
 - [아키텍처](#아키텍처)
@@ -49,6 +50,31 @@
 - **Karpenter** = Kubernetes 클러스터에 노드(EC2)를 자동으로 생성/삭제하는 컨트롤러
 - **NodePool** = "어떤 노드를 만들지" 정의하는 템플릿
 - **동작**: Pod가 Pending 상태 → Karpenter 감지 → 노드 자동 생성 → Pod 스케줄링
+
+## Karpenter 권한 구조
+
+**Karpenter가 Pod를 모니터링하고 AWS에 EC2를 생성하는 권한을 어떻게 얻는지 궁금하신가요?**
+
+👉 **[KARPENTER_PERMISSIONS.md](KARPENTER_PERMISSIONS.md)** 문서를 읽어보세요!
+
+**ServiceAccount가 무엇인지, 어떻게 Pod에 권한을 부여하는지 궁금하신가요?**
+
+👉 **[SERVICEACCOUNT_EXPLAINED.md](SERVICEACCOUNT_EXPLAINED.md)** 문서를 읽어보세요!
+
+간단 요약:
+- **Pod 모니터링 권한**: Kubernetes RBAC (ClusterRole) - Helm 차트가 자동 생성
+- **AWS EC2 생성 권한**: IRSA (IAM Roles for Service Accounts) - Terraform으로 설정
+- **연결**: ServiceAccount annotation에 IAM Role ARN 지정 → Pod가 자동으로 AWS 권한 획득
+- **ServiceAccount**: Pod의 "신원" - ClusterRoleBinding이 ServiceAccount에 권한 부여 → Pod가 ServiceAccount 사용
+
+**Kubernetes 내부에서 권한 검증이 어떻게 이루어지는지 궁금하신가요?**
+
+👉 **[KUBERNETES_AUTH_FLOW.md](KUBERNETES_AUTH_FLOW.md)** 문서를 읽어보세요!
+
+간단 요약:
+- **API Server**: 모든 요청의 중앙 게이트웨이, 권한 검증 수행
+- **RBAC Authorizer**: ClusterRole/ClusterRoleBinding 확인하여 권한 검증
+- **ServiceAccount Controller**: ServiceAccount Token 생성/관리
 
 ---
 

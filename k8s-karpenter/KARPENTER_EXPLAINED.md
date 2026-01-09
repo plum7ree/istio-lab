@@ -392,8 +392,19 @@ kubectl get nodes
 kubectl describe node <node-name>
 ```
 
+## 🔐 권한 구조
+
+Karpenter가 Pod를 모니터링하고 AWS에 EC2를 생성하는 권한에 대해 궁금하신가요?
+
+👉 **[KARPENTER_PERMISSIONS.md](KARPENTER_PERMISSIONS.md)** 문서를 읽어보세요!
+
+간단 요약:
+- **Pod 모니터링**: Kubernetes RBAC (ClusterRole) - Helm 차트가 자동 생성
+- **AWS EC2 생성**: IRSA (IAM Roles for Service Accounts) - Terraform으로 설정
+
 ## 📚 참고
 
 - [Karpenter 공식 문서](https://karpenter.sh/)
 - [NodePool 문서](https://karpenter.sh/docs/concepts/nodepools/)
 - [EC2NodeClass 문서](https://karpenter.sh/docs/concepts/nodeclasses/)
+- [Karpenter 권한 구조](KARPENTER_PERMISSIONS.md) ⭐
