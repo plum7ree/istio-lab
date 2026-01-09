@@ -75,6 +75,10 @@
 
 👉 **[KUBERNETES_CLUSTER_COMPONENTS.md](KUBERNETES_CLUSTER_COMPONENTS.md)** 문서를 읽어보세요!
 
+**Controller Manager와 다양한 Controller 종류가 궁금하신가요?**
+
+👉 **[CONTROLLER_MANAGER_EXPLAINED.md](CONTROLLER_MANAGER_EXPLAINED.md)** 문서를 읽어보세요!
+
 간단 요약:
 - **API Server**: 모든 요청의 중앙 게이트웨이, 권한 검증 수행
 - **RBAC Authorizer**: ClusterRole/ClusterRoleBinding 확인하여 권한 검증

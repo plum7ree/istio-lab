@@ -131,7 +131,15 @@ kubectl cluster-info
 - **Token Controller**: ServiceAccount Token 관리
 - **Namespace Controller**: Namespace 관리
 - **Endpoints Controller**: Service Endpoints 관리
+- **Service Controller**: LoadBalancer 관리
+- **Job Controller**: Job 실행 관리
+- **Deployment Controller**: Deployment 관리
+- **StatefulSet Controller**: StatefulSet 관리
+- **DaemonSet Controller**: DaemonSet 관리
+- **PersistentVolume Controller**: PV/PVC 관리
 - 등등...
+
+**더 자세한 내용**: [CONTROLLER_MANAGER_EXPLAINED.md](../CONTROLLER_MANAGER_EXPLAINED.md) ⭐
 
 **실행 위치**:
 ```bash
