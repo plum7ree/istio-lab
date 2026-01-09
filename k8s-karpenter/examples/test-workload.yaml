@@ -1,0 +1,94 @@
+# Karpenter 테스트용 워크로드
+# 이 워크로드를 배포하면 Karpenter가 자동으로 노드를 프로비저닝합니다.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karpenter-test-workload
+  namespace: default
+  labels:
+    app: karpenter-test
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: karpenter-test
+  template:
+    metadata:
+      labels:
+        app: karpenter-test
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        ports:
+        - containerPort: 80
+---
+# 고 CPU 워크로드 (더 큰 노드 필요)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karpenter-test-cpu-intensive
+  namespace: default
+  labels:
+    app: karpenter-test-cpu
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: karpenter-test-cpu
+  template:
+    metadata:
+      labels:
+        app: karpenter-test-cpu
+    spec:
+      containers:
+      - name: stress
+        image: containerstack/cpustress:latest
+        command: ["/bin/sh", "-c"]
+        args: ["stress-ng --cpu 4 --timeout 300s"]
+        resources:
+          requests:
+            cpu: 2
+            memory: 2Gi
+          limits:
+            cpu: 4
+            memory: 4Gi
+---
+# 고 메모리 워크로드
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karpenter-test-memory-intensive
+  namespace: default
+  labels:
+    app: karpenter-test-memory
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karpenter-test-memory
+  template:
+    metadata:
+      labels:
+        app: karpenter-test-memory
+    spec:
+      containers:
+      - name: memtest
+        image: polinux/stress:latest
+        command: ["stress"]
+        args: ["--vm", "2", "--vm-bytes", "2G", "--timeout", "300s"]
+        resources:
+          requests:
+            cpu: 1
+            memory: 3Gi
+          limits:
+            cpu: 2
+            memory: 4Gi

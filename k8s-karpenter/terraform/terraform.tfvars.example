@@ -1,0 +1,59 @@
+# Terraform 변수 예시 파일
+# 이 파일을 terraform.tfvars로 복사하고 실제 값으로 수정하세요
+
+aws_region = "us-west-2"
+cluster_name = "my-eks-cluster"
+environment = "dev"
+
+kubernetes_version = "1.28"
+
+# VPC 설정
+vpc_cidr = "10.0.0.0/16"
+private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+public_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+# NAT Gateway 설정 (비용 절감을 위해 단일 NAT Gateway 사용)
+single_nat_gateway = false
+
+# EKS 관리형 노드 그룹 생성 여부 (Karpenter와 함께 사용 가능)
+create_managed_node_group = true
+
+# Karpenter 버전
+karpenter_version = "v0.37.0"
+
+# 인스턴스 타입 (Karpenter가 선택할 수 있는 타입)
+instance_types = [
+  "t3.medium",
+  "t3.large",
+  "t3.xlarge",
+  "m5.large",
+  "m5.xlarge",
+  "c5.large",
+  "c5.xlarge"
+]
+
+# 용량 타입 (on-demand만 사용, spot은 제거됨)
+capacity_types = ["on-demand"]
+
+# 웹앱 자동 배포 여부
+deploy_webapp = true
+
+# NodePool 제한
+node_pool_cpu_limit = "1000"
+node_pool_memory_limit = "1000Gi"
+
+# AMI 패밀리
+ami_family = "AL2"
+
+# EBS 블록 디바이스 매핑
+block_device_mappings = [
+  {
+    device_name = "/dev/xvda"
+    ebs = {
+      volume_size           = 20
+      volume_type           = "gp3"
+      encrypted             = true
+      delete_on_termination = true
+    }
+  }
+]
