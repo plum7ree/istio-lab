@@ -49,7 +49,17 @@ terraform {
 }
 ```
 
-#### 4. 수동 Provider 다운로드
+#### 4. 완전 정리 및 재초기화
+
+```bash
+# 모든 캐시 정리
+rm -rf .terraform .terraform.lock.hcl
+
+# 업그레이드 모드로 재초기화
+terraform init -upgrade
+```
+
+#### 5. Provider 플러그인 수동 다운로드
 
 ```bash
 # Provider 캐시 디렉토리 확인
@@ -59,11 +69,37 @@ ls -la ~/.terraform.d/plugins/
 terraform providers mirror ~/.terraform.d/plugins/
 ```
 
-#### 5. Terraform 버전 확인
+#### 6. Terraform 버전 확인
 
 ```bash
 terraform version
 # Terraform >= 1.0 필요
+```
+
+#### 7. 환경 변수 설정 (필요시)
+
+```bash
+# Provider 다운로드 타임아웃 증가
+export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
+export TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE=1
+
+# 재시도
+terraform init
+```
+
+#### 8. Provider 버전 다운그레이드 (임시 해결책)
+
+`main.tf`에서 Provider 버전을 낮춰보세요:
+
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"  # 5.0 대신 4.0 시도
+    }
+  }
+}
 ```
 
 ## 🔧 기타 일반적인 문제

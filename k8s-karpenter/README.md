@@ -71,10 +71,16 @@
 
 👉 **[KUBERNETES_AUTH_FLOW.md](KUBERNETES_AUTH_FLOW.md)** 문서를 읽어보세요!
 
+**Kubernetes 클러스터의 구성 요소와 컴포넌트들이 궁금하신가요?**
+
+👉 **[KUBERNETES_CLUSTER_COMPONENTS.md](KUBERNETES_CLUSTER_COMPONENTS.md)** 문서를 읽어보세요!
+
 간단 요약:
 - **API Server**: 모든 요청의 중앙 게이트웨이, 권한 검증 수행
 - **RBAC Authorizer**: ClusterRole/ClusterRoleBinding 확인하여 권한 검증
 - **ServiceAccount Controller**: ServiceAccount Token 생성/관리
+- **Kubernetes API**: Control Plane에 위치, 클러스터 생성 시 자동 구성
+- **주요 컴포넌트**: API Server, etcd, Controller Manager, Scheduler, kubelet, kube-proxy
 
 ---
 

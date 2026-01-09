@@ -465,3 +465,4 @@ API Server
 - [Kubernetes RBAC 문서](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 - [ServiceAccount 문서](https://kubernetes.io/docs/concepts/security/service-accounts/)
 - [Admission Controllers 문서](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/)
+- [Kubernetes 클러스터 구성 요소](../KUBERNETES_CLUSTER_COMPONENTS.md) ⭐ **클러스터 구조가 궁금하면 여기!**
