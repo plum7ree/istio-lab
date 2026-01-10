@@ -290,6 +290,17 @@ kubectl delete -f quotas/
 kubectl delete -f shared/
 ```
 
+## Kubernetes 개념 이해하기
+
+### CRD와 Controller 완전 이해
+
+- **[CUSTOM_CRD_COMPLETE_GUIDE.md](CUSTOM_CRD_COMPLETE_GUIDE.md)** ⭐ **추천** - Custom Resource Definition과 Controller의 모든 개념을 하나로 정리
+  - 기본 개념 및 `kind`와 파라미터의 정의 위치
+  - CRD가 YAML 필드를 정의하는 방법
+  - Controller와 Operator의 역할
+  - Karpenter 예시로 실제 동작 방식 이해
+  - 실제 개발 순서 및 예제 코드
+
 ## 참고 자료
 
 - [Kubernetes 공식 문서](https://kubernetes.io/docs/)

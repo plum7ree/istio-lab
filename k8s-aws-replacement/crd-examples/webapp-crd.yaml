@@ -1,0 +1,71 @@
+# Custom Resource Definition 예제
+# 이것을 적용하면 새로운 kind: WebApp을 사용할 수 있습니다
+
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: webapps.example.com
+spec:
+  group: example.com
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            required:
+            - replicas
+            - image
+            properties:
+              replicas:
+                type: integer
+                description: "실행할 Pod의 개수"
+                minimum: 1
+                maximum: 10
+                default: 1
+              image:
+                type: string
+                description: "컨테이너 이미지"
+                pattern: '^[a-zA-Z0-9._/-]+:[a-zA-Z0-9._-]+$'
+              port:
+                type: integer
+                description: "컨테이너 포트"
+                minimum: 1
+                maximum: 65535
+                default: 80
+              env:
+                type: array
+                description: "환경 변수 목록"
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+          status:
+            type: object
+            properties:
+              availableReplicas:
+                type: integer
+                description: "실제 실행 중인 Pod 개수"
+              phase:
+                type: string
+                enum: ["Pending", "Running", "Failed"]
+                description: "WebApp의 현재 상태"
+    subresources:
+      status: {}
+  scope: Namespaced  # Namespace 단위 리소스
+  names:
+    plural: webapps          # kubectl get webapps
+    singular: webapp         # kubectl get webapp
+    kind: WebApp            # YAML에서 kind: WebApp
+    shortNames:
+    - wa                    # kubectl get wa
+    categories:
+    - all
+

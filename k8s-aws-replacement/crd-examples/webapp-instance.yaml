@@ -1,0 +1,21 @@
+# Custom Resource 인스턴스 예제
+# CRD를 먼저 생성한 후 이 파일을 적용하면 됩니다
+
+apiVersion: example.com/v1
+kind: WebApp
+metadata:
+  name: my-webapp
+  namespace: default
+  labels:
+    app: my-webapp
+    version: v1.0.0
+spec:
+  replicas: 3
+  image: nginx:1.21
+  port: 80
+  env:
+  - name: ENVIRONMENT
+    value: "production"
+  - name: LOG_LEVEL
+    value: "info"
+
